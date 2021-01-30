@@ -9,9 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectMngr">
-        <activity android:name=".SplashActivity"
+        <activity
+            android:name=".IntroActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ProjectMngr.NoActionBar"/>
+        <activity
+            android:name=".SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ProjectMngr.NoActionBar">
+
             <!-- App starts with SplashActivity -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,9 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"/>
     </application>
 
 </manifest>

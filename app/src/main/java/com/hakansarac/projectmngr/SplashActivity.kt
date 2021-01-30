@@ -1,8 +1,10 @@
 package com.hakansarac.projectmngr
 
+import android.content.Intent
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_splash.*
 
@@ -19,5 +21,14 @@ class SplashActivity : AppCompatActivity() {
         */
         val typeface : Typeface = Typeface.createFromAsset(assets,"carbon bl.ttf")
         textViewAppName.typeface = typeface
+
+
+        /**
+            After 2500 milliseconds, open IntroActivity.
+         */
+        Handler().postDelayed({
+            startActivity(Intent(this,IntroActivity::class.java))
+            finish()
+        },2000)
     }
 }
