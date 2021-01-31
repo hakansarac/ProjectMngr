@@ -7,21 +7,21 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:context=".SignUpActivity" >
+    tools:context=".SignInActivity" >
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarSignUpActivity"
+        android:id="@+id/toolbarSignInActivity"
         android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent" >
 
         <TextView
-            android:id="@+id/textViewTitleSignUp"
+            android:id="@+id/textViewTitleSignIn"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:textStyle="bold"
             android:textSize="@dimen/toolbar_title_text_size"
             android:textColor="@color/primary_text_color"
-            android:text="@string/sign_up"
+            android:text="@string/sign_in"
             android:gravity="center_vertical"/>
 
     </androidx.appcompat.widget.Toolbar>
@@ -40,7 +40,7 @@
             android:layout_marginStart="@dimen/authentication_screen_marginStartEnd"
             android:textSize="@dimen/authentication_description_text_size"
             android:textColor="@color/secondary_text_color"
-            android:text="@string/sign_up_description_text"
+            android:text="@string/sign_in_description_text"
             android:gravity="center" />
 
         <androidx.cardview.widget.CardView
@@ -58,20 +58,6 @@
                 android:padding="@dimen/card_view_layout_content_padding"
                 android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_marginEnd="@dimen/authentication_screen_til_marginStartEnd"
-                    android:layout_marginStart="@dimen/authentication_screen_til_marginStartEnd">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/editTextNameSignUp"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:textSize="@dimen/et_text_size"
-                        android:inputType="textEmailAddress"
-                        android:hint="@string/name"/>
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_height="wrap_content"
@@ -81,7 +67,7 @@
                     android:layout_marginStart="@dimen/authentication_screen_til_marginStartEnd">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/editTextEmailSignUp"
+                        android:id="@+id/editTextEmailSignIn"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:textSize="@dimen/et_text_size"
@@ -97,7 +83,7 @@
                     android:layout_marginStart="@dimen/authentication_screen_til_marginStartEnd">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/editTextPasswordSignUp"
+                        android:id="@+id/editTextPasswordSignIn"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:textSize="16sp"
@@ -106,7 +92,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
-                    android:id="@+id/buttonSignUp"
+                    android:id="@+id/buttonSignIn"
                     android:background="@drawable/shape_button_rounded"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
@@ -116,7 +102,7 @@
                     android:layout_marginStart="@dimen/btn_marginStartEnd"
                     android:textSize="@dimen/btn_text_size"
                     android:textColor="@android:color/white"
-                    android:text="@string/sign_up"
+                    android:text="@string/sign_in"
                     android:gravity="center"
                     android:paddingBottom="@dimen/btn_paddingTopBottom"
                     android:paddingTop="@dimen/btn_paddingTopBottom"

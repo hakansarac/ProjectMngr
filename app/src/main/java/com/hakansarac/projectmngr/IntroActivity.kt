@@ -20,4 +20,11 @@ class IntroActivity : AppCompatActivity() {
         val intent = Intent(this,SignUpActivity::class.java)
         startActivity(intent)
     }
+
+    //if user clicks SignIn button then...
+    fun onClickButtonSignInIntro(view : View){
+        val intent = Intent(this,SignInActivity::class.java)
+        startActivity(intent)
+    }
+
 }

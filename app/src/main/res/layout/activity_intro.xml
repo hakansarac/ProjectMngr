@@ -61,7 +61,8 @@
         android:layout_gravity="center"
         android:paddingBottom="@dimen/btn_paddingTopBottom"
         android:paddingTop="@dimen/btn_paddingTopBottom"
-        android:foreground="?attr/selectableItemBackground" />
+        android:foreground="?attr/selectableItemBackground"
+        android:onClick="onClickButtonSignInIntro" />
 
     <Button
         android:id="@+id/buttonSignUpIntro"

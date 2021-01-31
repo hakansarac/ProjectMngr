@@ -11,8 +11,15 @@
 
     <!-- Sign Up Activity strings start -->
     <string name="sign_up_description_text">Enter your name, email id and password, to register with us.</string>
+    <!-- Sign Up Activity strings end -->
+
+    <!-- Sign Up Activity and Sign In Activity strings start -->
     <string name="name">Name</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
-    <!-- Sign Up Activity strings end -->
+    <!-- Sign Up Activity and Sign In Activity strings end -->
+
+    <!-- Sign In Activity strings start -->
+    <string name="sign_in_description_text">Enter your name, email id and password, to register with us.</string>
+    <!-- Sign In Activity strings end -->
 </resources>
