@@ -1,8 +1,9 @@
-package com.hakansarac.projectmngr
+package com.hakansarac.projectmngr.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import com.hakansarac.projectmngr.R
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignUpActivity : AppCompatActivity() {

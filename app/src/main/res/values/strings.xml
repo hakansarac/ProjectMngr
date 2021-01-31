@@ -22,4 +22,10 @@
     <!-- Sign In Activity strings start -->
     <string name="sign_in_description_text">Enter your name, email id and password, to register with us.</string>
     <!-- Sign In Activity strings end -->
+
+    <string name="please_click_back_again_to_exit">Please click back again to exit.</string>
+
+    <!-- dialog_progress strings start -->
+    <string name="please_wait">Please Wait…</string>
+    <!-- dialog_progress strings end -->
 </resources>
