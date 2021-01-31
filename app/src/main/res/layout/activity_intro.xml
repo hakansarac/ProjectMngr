@@ -70,7 +70,7 @@
         android:gravity="center"
         android:background="@drawable/white_border_shape_button_rounded"
         android:textSize="@dimen/btn_text_size"
-        android:textColor="@color/white"
+        android:textColor="@color/blue_main"
         android:text="@string/sign_up"
         android:layout_marginTop="@dimen/intro_screen_sign_up_btn_marginTop"
         android:layout_marginEnd="@dimen/btn_marginStartEnd"
@@ -78,5 +78,6 @@
         android:layout_gravity="center"
         android:paddingBottom="@dimen/btn_paddingTopBottom"
         android:paddingTop="@dimen/btn_paddingTopBottom"
-        android:foreground="?attr/selectableItemBackground" />
+        android:foreground="?attr/selectableItemBackground"
+        android:onClick="onClickButtonSignUpIntro"/>
 </LinearLayout>

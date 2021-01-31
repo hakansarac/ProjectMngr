@@ -14,8 +14,13 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <!-- Splash Activity does not have action bar and title -->
     <style name="Theme.ProjectMngr.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- Splash Activity and Intro Activity does not have action bar and title -->
+    <style name="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
