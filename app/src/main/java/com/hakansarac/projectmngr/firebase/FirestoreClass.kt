@@ -26,7 +26,10 @@ class FirestoreClass {
             }//TODO: set addOnFailureListener
     }
 
-
+    /**
+     * when an user signed in,
+     * get his data from cloud firestore
+     */
     fun signInUser(activity: SignInActivity){
         mFireStore.collection(Constants.USERS)      //go to collection Users in cloud firestore
             .document(getCurrentUserId())           //go to current user's document
@@ -42,6 +45,10 @@ class FirestoreClass {
      * returns uuid
      */
     fun getCurrentUserId():String{
-        return FirebaseAuth.getInstance().currentUser!!.uid
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        var currentUserID = ""
+        if(currentUser != null)
+            currentUserID = currentUser.uid
+        return currentUserID
     }
 }

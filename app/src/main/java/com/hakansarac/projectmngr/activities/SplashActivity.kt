@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.WindowManager
 import com.hakansarac.projectmngr.R
+import com.hakansarac.projectmngr.firebase.FirestoreClass
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
@@ -28,7 +29,12 @@ class SplashActivity : AppCompatActivity() {
             After 2500 milliseconds, open IntroActivity.
          */
         Handler().postDelayed({
-            startActivity(Intent(this, IntroActivity::class.java))
+            val currentUserID = FirestoreClass().getCurrentUserId()
+            if(currentUserID.isNotEmpty()){
+                startActivity(Intent(this, MainActivity::class.java))       //if user has signed in already then go MainActivity directly
+            }else{
+                startActivity(Intent(this, IntroActivity::class.java))      //if user has not signed in yet then go IntroActivity
+            }
             finish()
         },2000)
     }
