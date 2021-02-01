@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.dialog_progress.*
  * but if we want to use features of an activity in other activities;
  * we will inherit the activity to other activities, instead of AppCompatActivity
  */
-class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity() {
 
     private var doubleBackToExitPressedOnce = false     //to close the app by pressing back twice
     private lateinit var mProgressDialog : Dialog       //to show progress bar while doing something in the background
