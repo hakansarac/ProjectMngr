@@ -67,6 +67,10 @@ open class BaseActivity : AppCompatActivity() {
         Handler().postDelayed({doubleBackToExitPressedOnce = false}, 2000)  //do that 2 seconds later
     }
 
+    /**
+     * to inform the user about the error.
+     * Snack Bar more useful than Toast Message in such cases
+     */
     fun showErrorSnackBar(message:String){
         val snackBar = Snackbar.make(findViewById(android.R.id.content),message,Snackbar.LENGTH_LONG)
         val snackBarView = snackBar.view
