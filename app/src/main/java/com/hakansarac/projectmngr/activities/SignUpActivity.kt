@@ -9,6 +9,8 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.hakansarac.projectmngr.R
+import com.hakansarac.projectmngr.firebase.FirestoreClass
+import com.hakansarac.projectmngr.models.User
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignUpActivity : BaseActivity() {
@@ -50,14 +52,11 @@ class SignUpActivity : BaseActivity() {
         if(validateForm(name,email,password)){
             showProgressDialog(resources.getString(R.string.please_wait))   //it is inherit from BaseActivity
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password).addOnCompleteListener{ task ->
-                hideProgressDialog()
                 if(task.isSuccessful){
                     val firebaseUser : FirebaseUser = task.result!!.user!!
                     val registeredEmail = firebaseUser.email!!
-                    Toast.makeText(applicationContext,"$name, you have successfully registered the e-mail adress $registeredEmail",Toast.LENGTH_SHORT).show()
-
-                    FirebaseAuth.getInstance().signOut()    //to disable the user to sign in directly.
-                    finish()
+                    val user = User(firebaseUser.uid,name,registeredEmail) //this user class is the user class we created
+                    FirestoreClass().registerUser(this,user)    //now we will create the registered user on cloud firestore database
                 }else{
                     Toast.makeText(applicationContext,task.exception?.message,Toast.LENGTH_SHORT).show()
                 }
@@ -85,6 +84,16 @@ class SignUpActivity : BaseActivity() {
             }
             else -> true
         }
+    }
+
+    /**
+     * if user registered successfully
+     */
+    fun userRegisteredSuccess(){
+        Toast.makeText(applicationContext,"You have successfully registered",Toast.LENGTH_SHORT).show()
+        hideProgressDialog()
+        FirebaseAuth.getInstance().signOut()
+        finish()
     }
 
     /**
