@@ -60,7 +60,7 @@ class SignUpActivity : BaseActivity() {
                 }else{
                     Toast.makeText(applicationContext,task.exception?.message,Toast.LENGTH_SHORT).show()
                 }
-            }
+            } //TODO: set addOnFailureListener
         }
     }
 

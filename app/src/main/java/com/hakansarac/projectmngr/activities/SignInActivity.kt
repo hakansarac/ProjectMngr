@@ -10,6 +10,8 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.hakansarac.projectmngr.R
+import com.hakansarac.projectmngr.firebase.FirestoreClass
+import com.hakansarac.projectmngr.models.User
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class SignInActivity : BaseActivity() {
@@ -56,15 +58,12 @@ class SignInActivity : BaseActivity() {
             auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this) { task ->
                 hideProgressDialog()
                 if(task.isSuccessful){
-                    Log.d("Sign In","signInWithEmail:success")
-                    val user = auth.currentUser
-                    val intent = Intent(this,MainActivity::class.java)
-                    startActivity(intent)
+                    FirestoreClass().signInUser(this)
                 }else{
                     Log.w("Sign In","signInWithEmail:failure",task.exception)
                     Toast.makeText(applicationContext,"Authentication failed.",Toast.LENGTH_SHORT).show()
                 }
-            }
+            } //TODO: set addOnFailureListener
         }
     }
 
@@ -85,6 +84,17 @@ class SignInActivity : BaseActivity() {
             }
             else -> true
         }
+    }
+
+    /**
+     * if user signed in successfully
+     * the user parameter is from the User class we created
+     */
+    fun signInSuccess(user : User){
+        hideProgressDialog()
+        val intent = Intent(this,MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     /**
