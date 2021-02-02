@@ -30,7 +30,7 @@ class SplashActivity : AppCompatActivity() {
          */
         Handler().postDelayed({
             val currentUserID = FirestoreClass().getCurrentUserId()
-            if(currentUserID.isNotEmpty()){
+            if(currentUserID.isNotEmpty()){                                               //it means FirebaseAuth.getInstance().currentUser is not null
                 startActivity(Intent(this, MainActivity::class.java))       //if user has signed in already then go MainActivity directly
             }else{
                 startActivity(Intent(this, IntroActivity::class.java))      //if user has not signed in yet then go IntroActivity
