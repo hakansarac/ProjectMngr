@@ -1,8 +1,11 @@
 package com.hakansarac.projectmngr.firebase
 
+import android.app.Activity
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.hakansarac.projectmngr.activities.MainActivity
 import com.hakansarac.projectmngr.activities.SignInActivity
 import com.hakansarac.projectmngr.activities.SignUpActivity
 import com.hakansarac.projectmngr.models.User
@@ -28,17 +31,28 @@ class FirestoreClass {
 
     /**
      * when an user signed in,
-     * get his data from cloud firestore
+     * get his data from cloud firestore.
+     * In MainActivity, fill the navigation header with user image and user name from firebase.
      */
-    fun signInUser(activity: SignInActivity){
+    fun signInUser(activity: Activity){
         mFireStore.collection(Constants.USERS)      //go to collection Users in cloud firestore
             .document(getCurrentUserId())           //go to current user's document
             .get()                                  //get the current user's fields
             .addOnSuccessListener { document ->
                 val loggedInUser = document.toObject(User::class.java)
-                if(loggedInUser != null)
-                    activity.signInSuccess(loggedInUser)
-            }//TODO: set addOnFailureListener
+                if(loggedInUser != null){
+                    when(activity){
+                        is SignInActivity -> activity.signInSuccess(loggedInUser)
+                        is MainActivity -> activity.updateNavigationUserDetails(loggedInUser)
+                    }
+                }
+            }.addOnFailureListener { exception ->
+                when(activity){
+                    is SignInActivity -> activity.hideProgressDialog()
+                    is MainActivity -> activity.hideProgressDialog()
+                }
+                Log.e("SignInUser","Error writing document",exception)
+            }
     }
 
     /**

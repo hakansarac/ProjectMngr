@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
+import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.hakansarac.projectmngr.R
+import com.hakansarac.projectmngr.firebase.FirestoreClass
+import com.hakansarac.projectmngr.models.User
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +22,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         setupActionBar()
         navigationView.setNavigationItemSelectedListener(this)
+        FirestoreClass().signInUser(this)
     }
 
     /**
@@ -97,5 +102,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    /**
+     * Get the image from firebase and show it as profile image by Glide(third party code)
+     * In addition, add user name to Navigation User Detail
+     */
+    fun updateNavigationUserDetails(user : User){
+        //https://github.com/bumptech/glide
+        Glide.with(this)
+            .load(user.image)
+            .centerCrop()
+            .placeholder(R.drawable.ic_user_place_holder)
+            .into(navUserImage)
+
+        textViewUserName.text = user.name
     }
 }
