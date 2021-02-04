@@ -8,20 +8,25 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.hakansarac.projectmngr.R
 import com.hakansarac.projectmngr.firebase.FirestoreClass
 import com.hakansarac.projectmngr.models.User
 import kotlinx.android.synthetic.main.activity_my_profile.*
 import java.io.IOException
 
-class MyProfileActivity : AppCompatActivity() {
+class MyProfileActivity : BaseActivity() {
 
     private var mSelectedImageFileUri : Uri? = null
+    private var mProfileImageURL : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +34,11 @@ class MyProfileActivity : AppCompatActivity() {
 
         setupActionBar()
         FirestoreClass().loadUserData(this)
+    }
+
+    companion object{
+        private const val READ_STORAGE_PERMISSION_CODE = 1
+        private const val PICK_IMAGE_REQUEST_CODE = 2
     }
 
     /**
@@ -118,8 +128,46 @@ class MyProfileActivity : AppCompatActivity() {
         }
     }
 
-    companion object{
-        private const val READ_STORAGE_PERMISSION_CODE = 1
-        private const val PICK_IMAGE_REQUEST_CODE = 2
+    /**
+     * upload user profile image
+     */
+    fun onClickButtonUpdateProfile(view: View){
+        if(mSelectedImageFileUri != null){
+            uploadUserImage()
+        }
+    }
+
+    /**
+     * set the StorageReference and upload the image to FirebaseStorage.
+     */
+    private fun uploadUserImage(){
+        showProgressDialog(resources.getString(R.string.please_wait))
+        if(mSelectedImageFileUri != null){      //if user chose an image to set profile picture.
+            val sRef : StorageReference = FirebaseStorage.getInstance().reference.child("USER_IMAGE" + System.currentTimeMillis() + "." + getFileExtension(mSelectedImageFileUri))
+            //TODO: to select more specific storage reference add random number instead of currentTimeMillis()
+
+            sRef.putFile(mSelectedImageFileUri!!).addOnSuccessListener { taskSnapshot ->
+                Log.i("Firebase Image Url",taskSnapshot.metadata!!.reference!!.downloadUrl.toString())
+                taskSnapshot.metadata!!.reference!!.downloadUrl.addOnSuccessListener { uri ->
+                    Log.i("Downloadable Image URL",uri.toString())
+                    mProfileImageURL = uri.toString()
+                    hideProgressDialog()
+                    //TODO update user profile data
+                }
+            }.addOnFailureListener { exception ->
+                Toast.makeText(this,exception.message.toString(),Toast.LENGTH_SHORT).show()
+                hideProgressDialog()
+            }
+        }
+    }
+
+    /**
+     * returns extension of input parameter
+     */
+    private fun getFileExtension(uri : Uri?): String? {
+        return if(uri != null)
+            MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri))
+        else
+            null
     }
 }

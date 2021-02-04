@@ -110,7 +110,8 @@
                     android:paddingBottom="@dimen/btn_paddingTopBottom"
                     android:text="@string/update"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/btn_text_size" />
+                    android:textSize="@dimen/btn_text_size"
+                    android:onClick="onClickButtonUpdateProfile"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
