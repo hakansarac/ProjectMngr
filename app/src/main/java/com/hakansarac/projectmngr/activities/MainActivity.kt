@@ -69,7 +69,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         when(item.itemId){
             //if user presses the My Profile button, then take the user to Profile page
             R.id.navMyProfile -> {
-                //TODO: add code here to go to profile page
+                val intent = Intent(this,MyProfileActivity::class.java)
+                startActivity(intent)
             }
             //if user presses the SignOut button, then sign out and take the user to IntroActivity
             R.id.navSignOut -> {
