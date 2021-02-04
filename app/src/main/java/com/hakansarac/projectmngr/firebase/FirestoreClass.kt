@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.hakansarac.projectmngr.activities.MainActivity
+import com.hakansarac.projectmngr.activities.MyProfileActivity
 import com.hakansarac.projectmngr.activities.SignInActivity
 import com.hakansarac.projectmngr.activities.SignUpActivity
 import com.hakansarac.projectmngr.models.User
@@ -30,11 +31,9 @@ class FirestoreClass {
     }
 
     /**
-     * when an user signed in,
-     * get his data from cloud firestore.
-     * In MainActivity, fill the navigation header with user image and user name from firebase.
+     * get the signed in user data from firebase.
      */
-    fun signInUser(activity: Activity){
+    fun loadUserData(activity: Activity){
         mFireStore.collection(Constants.USERS)      //go to collection Users in cloud firestore
             .document(getCurrentUserId())           //go to current user's document
             .get()                                  //get the current user's fields
@@ -44,6 +43,7 @@ class FirestoreClass {
                     when(activity){
                         is SignInActivity -> activity.signInSuccess(loggedInUser)
                         is MainActivity -> activity.updateNavigationUserDetails(loggedInUser)
+                        is MyProfileActivity -> activity.setUserDataInUI(loggedInUser)
                     }
                 }
             }.addOnFailureListener { exception ->

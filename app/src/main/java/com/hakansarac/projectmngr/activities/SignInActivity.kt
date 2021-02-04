@@ -1,7 +1,6 @@
 package com.hakansarac.projectmngr.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -58,7 +57,7 @@ class SignInActivity : BaseActivity() {
             auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this) { task ->
                 hideProgressDialog()
                 if(task.isSuccessful){
-                    FirestoreClass().signInUser(this)
+                    FirestoreClass().loadUserData(this)
                 }else{
                     Log.w("Sign In","signInWithEmail:failure",task.exception)
                     Toast.makeText(applicationContext,"Authentication failed.",Toast.LENGTH_SHORT).show()

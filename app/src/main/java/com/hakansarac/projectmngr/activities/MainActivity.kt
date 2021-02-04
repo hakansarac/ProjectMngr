@@ -1,7 +1,6 @@
 package com.hakansarac.projectmngr.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
@@ -22,7 +21,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         setupActionBar()
         navigationView.setNavigationItemSelectedListener(this)
-        FirestoreClass().signInUser(this)
+        FirestoreClass().loadUserData(this)
     }
 
     /**
