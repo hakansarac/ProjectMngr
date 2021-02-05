@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
@@ -136,5 +137,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }else{
             Log.e("Cancelled","Cancelled")
         }
+    }
+
+    fun onClickPlusIconMain(view : View){
+        val intent = Intent(this,CreateBoardActivity::class.java)
+        startActivity(intent)
     }
 }
