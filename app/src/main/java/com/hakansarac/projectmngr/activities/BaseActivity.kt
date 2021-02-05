@@ -54,7 +54,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     /**
-     * if somebody presses the back button twice, application should be closed
+     * if the user presses the back button twice, application should be closed
      */
     fun doubleBackToExit(){
         if(doubleBackToExitPressedOnce){

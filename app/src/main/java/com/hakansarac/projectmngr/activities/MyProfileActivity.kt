@@ -20,6 +20,7 @@ import com.google.firebase.storage.StorageReference
 import com.hakansarac.projectmngr.R
 import com.hakansarac.projectmngr.firebase.FirestoreClass
 import com.hakansarac.projectmngr.models.User
+import com.hakansarac.projectmngr.utils.Constants
 import kotlinx.android.synthetic.main.activity_my_profile.*
 import java.io.IOException
 
@@ -27,6 +28,7 @@ class MyProfileActivity : BaseActivity() {
 
     private var mSelectedImageFileUri : Uri? = null
     private var mProfileImageURL : String = ""
+    private lateinit var mUserDetails: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +61,8 @@ class MyProfileActivity : BaseActivity() {
      * set the user details in My Profile page.
      */
     fun setUserDataInUI(user : User){
+        mUserDetails = user
+
         //https://github.com/bumptech/glide
         Glide.with(this)
                 .load(user.image)
@@ -70,6 +74,31 @@ class MyProfileActivity : BaseActivity() {
         editTextEmailProfile.setText(user.email)
         if(user.mobile != 0L)
             editTextMobileProfile.setText(user.mobile.toString())
+    }
+
+    /**
+     * check the changes and update userHashMap
+     * and call the FirestoreClass().updateUserProfileData() function to update the user details on Firebase
+     */
+    fun updateUserProfileData(){
+        val userHashMap = HashMap<String,Any>()
+        var anyChanges = false
+
+        if(mProfileImageURL.isNotEmpty() && mProfileImageURL != mUserDetails.image) {     //if the image changed
+            userHashMap[Constants.IMAGE] = mProfileImageURL                             //then add the image to userHashMap to update
+            anyChanges = true
+        }
+        if(editTextNameProfile.text.toString() != mUserDetails.name) {                  //if the name changed
+            userHashMap[Constants.NAME] = editTextNameProfile.text.toString()           //then add the name to userHashMap to update
+            anyChanges = true
+        }
+
+        if(editTextMobileProfile.text.toString() != mUserDetails.mobile.toString()) {          //if the mobile changed
+            userHashMap[Constants.MOBILE] = editTextMobileProfile.text.toString().toLong()    //then add the mobile to userHashMap to update
+            anyChanges = true
+        }
+        if(anyChanges)
+            FirestoreClass().updateUserProfileData(this,userHashMap)
     }
 
     /**
@@ -129,15 +158,6 @@ class MyProfileActivity : BaseActivity() {
     }
 
     /**
-     * upload user profile image
-     */
-    fun onClickButtonUpdateProfile(view: View){
-        if(mSelectedImageFileUri != null){
-            uploadUserImage()
-        }
-    }
-
-    /**
      * set the StorageReference and upload the image to FirebaseStorage.
      */
     private fun uploadUserImage(){
@@ -151,8 +171,7 @@ class MyProfileActivity : BaseActivity() {
                 taskSnapshot.metadata!!.reference!!.downloadUrl.addOnSuccessListener { uri ->
                     Log.i("Downloadable Image URL",uri.toString())
                     mProfileImageURL = uri.toString()
-                    hideProgressDialog()
-                    //TODO update user profile data
+                    updateUserProfileData()
                 }
             }.addOnFailureListener { exception ->
                 Toast.makeText(this,exception.message.toString(),Toast.LENGTH_SHORT).show()
@@ -169,5 +188,22 @@ class MyProfileActivity : BaseActivity() {
             MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri))
         else
             null
+    }
+
+    /**
+     * update the user details when click on update button
+     */
+    fun onClickButtonUpdateProfile(view: View){
+        if(mSelectedImageFileUri != null){
+            uploadUserImage()       //first, upload the user image to Firebase Storage then update user details on Firebase by calling updateUserProfileData() in uploadUserImage()
+        }else {
+            showProgressDialog(resources.getString(R.string.please_wait))
+            updateUserProfileData()     //update user details on Firebase
+        }
+    }
+
+    fun profileUpdateSuccess(){
+        hideProgressDialog()
+        finish()
     }
 }
