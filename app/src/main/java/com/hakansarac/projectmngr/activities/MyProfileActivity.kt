@@ -204,6 +204,7 @@ class MyProfileActivity : BaseActivity() {
 
     fun profileUpdateSuccess(){
         hideProgressDialog()
+        setResult(Activity.RESULT_OK)   //Main Activity will be affected by those changes
         finish()
     }
 }

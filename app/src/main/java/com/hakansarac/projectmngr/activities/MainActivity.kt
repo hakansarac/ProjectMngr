@@ -1,7 +1,9 @@
 package com.hakansarac.projectmngr.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
@@ -22,6 +24,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setupActionBar()
         navigationView.setNavigationItemSelectedListener(this)
         FirestoreClass().loadUserData(this)
+    }
+
+    companion object{
+        const val MY_PROFILE_REQUEST_CODE : Int = 11
     }
 
     /**
@@ -69,7 +75,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             //if user presses the My Profile button, then take the user to Profile page
             R.id.navMyProfile -> {
                 val intent = Intent(this,MyProfileActivity::class.java)
-                startActivity(intent)
+                startActivityForResult(intent, MY_PROFILE_REQUEST_CODE) //if the user details changed, Main Activity will be affected, too.
             }
             //if user presses the SignOut button, then sign out and take the user to IntroActivity
             R.id.navSignOut -> {
@@ -117,5 +123,18 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             .into(navUserImage)
 
         textViewUserName.text = user.name
+    }
+
+    /**
+     * if user changes the profile details,
+     * then get the changes to set them.
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == MY_PROFILE_REQUEST_CODE){
+            FirestoreClass().loadUserData(this)
+        }else{
+            Log.e("Cancelled","Cancelled")
+        }
     }
 }
