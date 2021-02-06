@@ -13,11 +13,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.hakansarac.projectmngr.R
 import com.hakansarac.projectmngr.firebase.FirestoreClass
 import com.hakansarac.projectmngr.models.User
+import com.hakansarac.projectmngr.utils.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private lateinit var mUserName : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -116,6 +120,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
      * In addition, add user name to Navigation User Detail
      */
     fun updateNavigationUserDetails(user : User){
+        mUserName = user.name   //we set mUserName here. because if we set in FirestoreClass and we decide to not using Firebase anymore, we will not have problem as change everything. Changing FirestoreClass will be enough.
         //https://github.com/bumptech/glide
         Glide.with(this)
             .load(user.image)
@@ -141,6 +146,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     fun onClickPlusIconMain(view : View){
         val intent = Intent(this,CreateBoardActivity::class.java)
+        intent.putExtra(Constants.NAME,mUserName)
         startActivity(intent)
     }
 }

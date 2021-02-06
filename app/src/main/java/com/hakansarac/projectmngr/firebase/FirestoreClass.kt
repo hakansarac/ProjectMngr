@@ -6,10 +6,8 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.hakansarac.projectmngr.activities.MainActivity
-import com.hakansarac.projectmngr.activities.MyProfileActivity
-import com.hakansarac.projectmngr.activities.SignInActivity
-import com.hakansarac.projectmngr.activities.SignUpActivity
+import com.hakansarac.projectmngr.activities.*
+import com.hakansarac.projectmngr.models.Board
 import com.hakansarac.projectmngr.models.User
 import com.hakansarac.projectmngr.utils.Constants
 
@@ -82,6 +80,20 @@ class FirestoreClass {
                     activity.hideProgressDialog()
                     Log.e(activity.javaClass.simpleName,"Error while creating board.",exception)
                     Toast.makeText(activity,"Error while updating the profile.",Toast.LENGTH_SHORT).show()
+                }
+    }
+
+    fun createBoard(activity:CreateBoardActivity,board : Board){
+        mFireStore.collection(Constants.BOARDS)
+                .document() //random id
+                .set(board, SetOptions.merge())
+                .addOnSuccessListener {
+                    Log.e(activity.javaClass.simpleName,"Board created successfully.")
+                    Toast.makeText(activity,"Board created successfully.",Toast.LENGTH_SHORT).show()
+                    activity.boardCreatedSuccessfully()
+                }.addOnFailureListener { exception ->
+                    activity.hideProgressDialog()
+                    Log.e(activity.javaClass.simpleName,"Error while creating a board.",exception)
                 }
     }
 }

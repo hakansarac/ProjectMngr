@@ -28,7 +28,7 @@ class MyProfileActivity : BaseActivity() {
 
     private var mSelectedImageFileUri : Uri? = null
     private var mProfileImageURL : String = ""
-    private lateinit var mUserDetails: User
+    private lateinit var mUserDetails : User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +38,6 @@ class MyProfileActivity : BaseActivity() {
         FirestoreClass().loadUserData(this)
     }
 
-    companion object{
-        private const val READ_STORAGE_PERMISSION_CODE = 1
-        private const val PICK_IMAGE_REQUEST_CODE = 2
-    }
 
     /**
      * setting up the action bar
@@ -106,9 +102,9 @@ class MyProfileActivity : BaseActivity() {
      */
     fun onClickUserImageProfile(view : View){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            showImageChooser()
+            Constants.showImageChooser(this)
         }else{
-            ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), READ_STORAGE_PERMISSION_CODE)
+            ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), Constants.READ_STORAGE_PERMISSION_CODE)
         }
     }
 
@@ -118,21 +114,13 @@ class MyProfileActivity : BaseActivity() {
      */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == READ_STORAGE_PERMISSION_CODE){
+        if(requestCode == Constants.READ_STORAGE_PERMISSION_CODE){
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                showImageChooser()
+                Constants.showImageChooser(this)
             }else{
                 Toast.makeText(this,"You just denied the permission for storage. You can allow it from the settings.",Toast.LENGTH_LONG).show()
             }
         }
-    }
-
-    /**
-     * open the gallery intent to pick an image for profile picture.
-     */
-    private fun showImageChooser(){
-        val galleryIntent = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST_CODE)    //we want to get image data and result will be that data. therefore we call startActivityForResult
     }
 
     /**
@@ -141,7 +129,7 @@ class MyProfileActivity : BaseActivity() {
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE_REQUEST_CODE && data!!.data != null){
+        if(resultCode == Activity.RESULT_OK && requestCode == Constants.PICK_IMAGE_REQUEST_CODE && data!!.data != null){
             mSelectedImageFileUri = data.data
 
             try {
@@ -163,7 +151,7 @@ class MyProfileActivity : BaseActivity() {
     private fun uploadUserImage(){
         showProgressDialog(resources.getString(R.string.please_wait))
         if(mSelectedImageFileUri != null){      //if user chose an image to set profile picture.
-            val sRef : StorageReference = FirebaseStorage.getInstance().reference.child("USER_IMAGE" + System.currentTimeMillis() + "." + getFileExtension(mSelectedImageFileUri))
+            val sRef : StorageReference = FirebaseStorage.getInstance().reference.child("USER_IMAGE" + System.currentTimeMillis() + "." + Constants.getFileExtension(this,mSelectedImageFileUri))
             //TODO: to select more specific storage reference add random number instead of currentTimeMillis()
 
             sRef.putFile(mSelectedImageFileUri!!).addOnSuccessListener { taskSnapshot ->
@@ -178,16 +166,6 @@ class MyProfileActivity : BaseActivity() {
                 hideProgressDialog()
             }
         }
-    }
-
-    /**
-     * returns extension of input parameter
-     */
-    private fun getFileExtension(uri : Uri?): String? {
-        return if(uri != null)
-            MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri))
-        else
-            null
     }
 
     /**
