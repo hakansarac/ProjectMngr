@@ -83,6 +83,9 @@ class FirestoreClass {
                 }
     }
 
+    /**
+     * new board entry as a document to Boards collection on cloud firestore
+     */
     fun createBoard(activity:CreateBoardActivity,board : Board){
         mFireStore.collection(Constants.BOARDS)
                 .document() //random id
