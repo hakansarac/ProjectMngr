@@ -40,9 +40,13 @@
     <string name="my_profile">My Profile</string>
     <!-- MyProfileActivity strings end -->
 
-    <!--  -->
+    <!-- CreateBoardActivity strings start -->
     <string name="create_board_title">Create Board</string>
     <string name="create">CREATE</string>
     <string name="board_name">Board Name</string>
+    <!-- CreateBoardActivity strings end -->
+
+    <!--  -->
+    <string name="no_boards_are_available">No Boards are available!</string>
     <!--  -->
 </resources>
