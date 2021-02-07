@@ -48,5 +48,7 @@ open class BoardItemsAdapter(private val context : Context, private var list : A
         fun onClick(position:Int, model:Board)
     }
 
-
+    fun setOnClickListener(onClickListener : OnClickListener){
+        this.onClickListener = onClickListener
+    }
 }

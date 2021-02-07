@@ -127,4 +127,21 @@ class FirestoreClass {
                     Log.e(activity.javaClass.simpleName,"Error while creating a board",exception)
                 }
     }
+
+    /**
+     * getting clicked board details from FireStore
+     */
+    fun getBoardDetails(activity : TaskListActivity,documentId : String){
+        mFireStore.collection(Constants.BOARDS)
+            .document(documentId)
+            .get()
+            .addOnSuccessListener {
+                    document ->
+                Log.i(activity.javaClass.simpleName,document.toString())
+                activity.boardDetails(document.toObject(Board::class.java)!!)
+            }.addOnFailureListener { exception ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,"Error while creating a board",exception)
+            }
+    }
 }
