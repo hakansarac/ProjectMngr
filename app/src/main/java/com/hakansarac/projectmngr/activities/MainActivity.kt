@@ -37,6 +37,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     companion object{
         const val MY_PROFILE_REQUEST_CODE : Int = 11
+        const val CREATE_BOARD_REQUEST_CODE = 12
     }
 
     /**
@@ -146,8 +147,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == Activity.RESULT_OK && requestCode == MY_PROFILE_REQUEST_CODE){
-            FirestoreClass().loadUserData(this)
+        if(resultCode == Activity.RESULT_OK && requestCode == MY_PROFILE_REQUEST_CODE){     //if profile updated successfully
+            FirestoreClass().loadUserData(this)     //reload the user details when come back to main activity
+        }else if(resultCode == Activity.RESULT_OK && requestCode == CREATE_BOARD_REQUEST_CODE){     //if a new board added successfully
+            FirestoreClass().getBoardsList(this)    //reload the boards list when come back to main activity
         }else{
             Log.e("Cancelled","Cancelled")
         }
@@ -159,9 +162,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     fun onClickPlusIconMain(view : View){
         val intent = Intent(this,CreateBoardActivity::class.java)
         intent.putExtra(Constants.NAME,mUserName)
-        startActivity(intent)
+        startActivityForResult(intent, CREATE_BOARD_REQUEST_CODE)       //to reload boards list when new board added
     }
 
+    /**
+     * setup boards list to UI if there are any boards.
+     */
     fun populateBoardsListToUI(boardsList : ArrayList<Board>){
         hideProgressDialog()
         if(boardsList.size > 0 ){
