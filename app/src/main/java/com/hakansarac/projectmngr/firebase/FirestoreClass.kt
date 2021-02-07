@@ -31,8 +31,12 @@ class FirestoreClass {
 
     /**
      * get the signed in user data from firebase.
+     * set the readBoardsList false if boards already loaded before.
+     * (for example; firstly, user opened the application and boards loaded.
+     * After that user opened the profile page and came back to main activity.
+     * In this situation we will not need to read boards again.)
      */
-    fun loadUserData(activity: Activity){
+    fun loadUserData(activity: Activity, readBoardsList: Boolean = false){
         mFireStore.collection(Constants.USERS)      //go to collection Users in cloud firestore
             .document(getCurrentUserId())           //go to current user's document
             .get()                                  //get the current user's fields
@@ -41,7 +45,7 @@ class FirestoreClass {
                 if(loggedInUser != null){
                     when(activity){
                         is SignInActivity -> activity.signInSuccess(loggedInUser)
-                        is MainActivity -> activity.updateNavigationUserDetails(loggedInUser)
+                        is MainActivity -> activity.updateNavigationUserDetails(loggedInUser,readBoardsList)
                         is MyProfileActivity -> activity.setUserDataInUI(loggedInUser)
                     }
                 }
@@ -49,6 +53,7 @@ class FirestoreClass {
                 when(activity){
                     is SignInActivity -> activity.hideProgressDialog()
                     is MainActivity -> activity.hideProgressDialog()
+                    is MyProfileActivity -> activity.hideProgressDialog()
                 }
                 Log.e("SignInUser","Error writing document",exception)
             }
@@ -97,6 +102,29 @@ class FirestoreClass {
                 }.addOnFailureListener { exception ->
                     activity.hideProgressDialog()
                     Log.e(activity.javaClass.simpleName,"Error while creating a board.",exception)
+                }
+    }
+
+    /**
+     * returns all boards assigned to current user in a list
+     */
+    fun getBoardsList(activity : MainActivity){
+        mFireStore.collection(Constants.BOARDS)
+                .whereArrayContains(Constants.ASSIGNED_TO,getCurrentUserId())   //checking the board collection to find boards which assigned to current user
+                .get()
+                .addOnSuccessListener {
+                    document ->
+                    Log.i(activity.javaClass.simpleName,document.documents.toString())
+                    val boardsList : ArrayList<Board> = ArrayList()
+                    for(i in document.documents){
+                        val board = i.toObject(Board::class.java)!!   //create a board object and store in board variable
+                        board.documentId = i.id
+                        boardsList.add(board)
+                    }
+                    activity.populateBoardsListToUI(boardsList)
+                }.addOnFailureListener { exception ->
+                    activity.hideProgressDialog()
+                    Log.e(activity.javaClass.simpleName,"Error while creating a board",exception)
                 }
     }
 }

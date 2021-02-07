@@ -7,15 +7,19 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.hakansarac.projectmngr.R
+import com.hakansarac.projectmngr.adapters.BoardItemsAdapter
 import com.hakansarac.projectmngr.firebase.FirestoreClass
+import com.hakansarac.projectmngr.models.Board
 import com.hakansarac.projectmngr.models.User
 import com.hakansarac.projectmngr.utils.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -28,7 +32,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         setupActionBar()
         navigationView.setNavigationItemSelectedListener(this)
-        FirestoreClass().loadUserData(this)
+        FirestoreClass().loadUserData(this,true)
     }
 
     companion object{
@@ -119,7 +123,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
      * Get the image from firebase and show it as profile image by Glide(third party code)
      * In addition, add user name to Navigation User Detail
      */
-    fun updateNavigationUserDetails(user : User){
+    fun updateNavigationUserDetails(user : User, readBoardsList: Boolean){
         mUserName = user.name   //we set mUserName here. because if we set in FirestoreClass and we decide to not using Firebase anymore, we will not have problem as change everything. Changing FirestoreClass will be enough.
         //https://github.com/bumptech/glide
         Glide.with(this)
@@ -129,6 +133,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             .into(navUserImage)
 
         textViewUserName.text = user.name
+
+        if(readBoardsList){
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FirestoreClass().getBoardsList(this)
+        }
     }
 
     /**
@@ -144,9 +153,29 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
+    /**
+     * take th user to CreateBoardActivity
+     */
     fun onClickPlusIconMain(view : View){
         val intent = Intent(this,CreateBoardActivity::class.java)
         intent.putExtra(Constants.NAME,mUserName)
         startActivity(intent)
+    }
+
+    fun populateBoardsListToUI(boardsList : ArrayList<Board>){
+        hideProgressDialog()
+        if(boardsList.size > 0 ){
+            recyclerViewBoardsList.visibility = View.VISIBLE
+            textViewNoBoardsAvailable.visibility = View.GONE
+
+            recyclerViewBoardsList.layoutManager = LinearLayoutManager(this)
+            recyclerViewBoardsList.setHasFixedSize(true)
+
+            val adapter = BoardItemsAdapter(this,boardsList)
+            recyclerViewBoardsList.adapter = adapter
+        }else{
+            recyclerViewBoardsList.visibility = View.GONE
+            textViewNoBoardsAvailable.visibility = View.VISIBLE
+        }
     }
 }
