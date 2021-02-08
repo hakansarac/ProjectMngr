@@ -13,6 +13,8 @@ import kotlinx.android.synthetic.main.activity_my_profile.*
 import kotlinx.android.synthetic.main.activity_task_list.*
 
 class TaskListActivity : BaseActivity() {
+
+    private lateinit var mBoardDetails : Board
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
@@ -29,13 +31,13 @@ class TaskListActivity : BaseActivity() {
     /**
      * setting up the action bar
      */
-    private fun setupActionBar(title : String){
+    private fun setupActionBar(){
         setSupportActionBar(toolbarTaskListActivity)
         val actionBar = supportActionBar
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = title
+            actionBar.title = mBoardDetails.name
         }
         toolbarTaskListActivity.setNavigationOnClickListener { onBackPressed() }
     }
@@ -45,8 +47,9 @@ class TaskListActivity : BaseActivity() {
      * and set action bar and recyclerViewTaskList
      */
     fun boardDetails(board : Board){
+        mBoardDetails = board
         hideProgressDialog()
-        setupActionBar(board.name)
+        setupActionBar()
 
         val addTaskList = Task(resources.getString(R.string.add_list))
         board.taskList.add(addTaskList) //it will be Add List textView(selectable item like a button)
@@ -54,5 +57,27 @@ class TaskListActivity : BaseActivity() {
         recyclerViewTaskList.setHasFixedSize(true)
         val adapter = TaskListItemsAdapter(this,board.taskList)
         recyclerViewTaskList.adapter = adapter
+    }
+
+    /**
+     * when task list updated successfully,
+     * get the board details to show in TaskListActivity
+     */
+    fun addUpdateTaskListSuccess(){
+        hideProgressDialog()    //hide when loaded activity successfully
+        showProgressDialog(resources.getString(R.string.please_wait))    //show while trying to get something from FireStore
+        FirestoreClass().getBoardDetails(this,mBoardDetails.documentId)
+    }
+
+    /**
+     * creating new task and adding to the task list
+     */
+    fun createTaskList(taskListName : String){
+        val task = Task(taskListName,FirestoreClass().getCurrentUserId())
+        mBoardDetails.taskList.add(0,task)
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)
+        showProgressDialog(resources.getString(R.string.please_wait))
+
+        FirestoreClass().addUpdateTaskList(this,mBoardDetails)
     }
 }

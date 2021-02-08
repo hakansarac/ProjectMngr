@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.hakansarac.projectmngr.R
+import com.hakansarac.projectmngr.activities.TaskListActivity
 import com.hakansarac.projectmngr.models.Task
 import kotlinx.android.synthetic.main.item_task.view.*
 
@@ -30,6 +32,33 @@ open class TaskListItemsAdapter(private val context: Context, private var list: 
             }else{
                 holder.itemView.textViewAddTaskList.visibility = View.GONE
                 holder.itemView.linearLayoutTaskItem.visibility = View.VISIBLE
+            }
+
+            holder.itemView.textViewTaskListTitle.text = model.title
+
+            //if user clicks on Add Task List text view button,
+            //hide the button and show add task list name card view
+            holder.itemView.textViewAddTaskList.setOnClickListener {
+                holder.itemView.textViewAddTaskList.visibility = View.GONE
+                holder.itemView.cardViewAddTaskListName.visibility = View.VISIBLE
+            }
+            //if user close the card view,
+            //hide the card view and show Add Task List text view button
+            holder.itemView.imageButtonCloseListName.setOnClickListener {
+                holder.itemView.textViewAddTaskList.visibility = View.VISIBLE
+                holder.itemView.cardViewAddTaskListName.visibility = View.GONE
+            }
+            //if user create new task,
+            //create entry in DB and display the task list
+            holder.itemView.imageButtonDoneListName.setOnClickListener {
+                val listName = holder.itemView.editTextTaskListName.text.toString()
+                if(listName.isNotEmpty()){
+                    if(context is TaskListActivity){
+                        context.createTaskList(listName)
+                    }else{
+                        Toast.makeText(context,"Please enter list name.",Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }
