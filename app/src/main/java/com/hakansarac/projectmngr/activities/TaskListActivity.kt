@@ -7,6 +7,7 @@ import com.hakansarac.projectmngr.R
 import com.hakansarac.projectmngr.adapters.TaskListItemsAdapter
 import com.hakansarac.projectmngr.firebase.FirestoreClass
 import com.hakansarac.projectmngr.models.Board
+import com.hakansarac.projectmngr.models.Card
 import com.hakansarac.projectmngr.models.Task
 import com.hakansarac.projectmngr.utils.Constants
 import kotlinx.android.synthetic.main.activity_my_profile.*
@@ -103,6 +104,25 @@ class TaskListActivity : BaseActivity() {
         mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)
         showProgressDialog(resources.getString(R.string.please_wait))
 
+        FirestoreClass().addUpdateTaskList(this,mBoardDetails)
+    }
+
+    /**
+     * add new card to the task
+     * and update task
+     */
+    fun addCardToTaskList(position: Int,cardName: String){
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)
+        val cardAssignedUsersList : ArrayList<String> = ArrayList()
+        cardAssignedUsersList.add(FirestoreClass().getCurrentUserId())
+        val card = Card(cardName,FirestoreClass().getCurrentUserId(),cardAssignedUsersList)
+        val cardsList = mBoardDetails.taskList[position].cards
+        cardsList.add(card)
+
+        val task = Task(mBoardDetails.taskList[position].title, mBoardDetails.taskList[position].createdBy, cardsList)
+        mBoardDetails.taskList[position] = task
+
+        showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().addUpdateTaskList(this,mBoardDetails)
     }
 }

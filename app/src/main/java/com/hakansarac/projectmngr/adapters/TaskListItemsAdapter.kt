@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hakansarac.projectmngr.R
 import com.hakansarac.projectmngr.activities.TaskListActivity
@@ -91,6 +92,35 @@ open class TaskListItemsAdapter(private val context: Context, private var list: 
             holder.itemView.imageButtonDeleteList.setOnClickListener {
                 alertDialogForDeleteList(position,model.title)
             }
+            //if the user presses add card button,
+            //hide add card text and show add card cardView
+            holder.itemView.textViewAddCard.setOnClickListener {
+                holder.itemView.textViewAddCard.visibility = View.GONE
+                holder.itemView.cardViewAddCard.visibility = View.VISIBLE
+            }
+            //if the user presses cancel add card button,
+            //show add card text and hide add card cardView
+            holder.itemView.imageButtonCloseCardName.setOnClickListener {
+                holder.itemView.textViewAddCard.visibility = View.VISIBLE
+                holder.itemView.cardViewAddCard.visibility = View.GONE
+            }
+            //if user creates new card,
+            //create entry in DB and display the card
+            holder.itemView.imageButtonDoneCardName.setOnClickListener {
+                val cardName = holder.itemView.editTextCardName.text.toString()
+                if(cardName.isNotEmpty()) {
+                    if (context is TaskListActivity) {
+                        context.addCardToTaskList(position,cardName)
+                    }
+                }else{
+                    Toast.makeText(context,"Please enter a card name.",Toast.LENGTH_SHORT).show()
+                }
+            }
+            holder.itemView.recyclerViewCardList.layoutManager = LinearLayoutManager(context)
+            holder.itemView.recyclerViewCardList.setHasFixedSize(true)
+
+            val adapter = CardListItemsAdapter(context,model.cards)
+            holder.itemView.recyclerViewCardList.adapter = adapter
         }
     }
 
