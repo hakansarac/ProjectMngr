@@ -46,9 +46,9 @@
     <string name="board_name">Board Name</string>
     <!-- CreateBoardActivity strings end -->
 
-    <!--  -->
+    <!-- main activity strings start -->
     <string name="no_boards_are_available">No Boards are available!</string>
-    <!--  -->
+    <!-- main activity strings end -->
 
     <!-- task item strings start -->
     <string name="action_add_list">Add List</string>
@@ -57,4 +57,8 @@
     <string name="hint_card_name">Card Name</string>
     <string name="add_list">Add List</string>
     <!-- task item strings end -->
+
+    <!-- member activity strings start -->
+    <string name="members">Members</string>
+    <!-- member activity strings end -->
 </resources>
