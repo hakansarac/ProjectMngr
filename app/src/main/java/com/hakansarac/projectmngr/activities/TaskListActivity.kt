@@ -41,6 +41,7 @@ class TaskListActivity : BaseActivity() {
         when(item.itemId){
             R.id.actionMembers -> {
                 val intent = Intent(this,MembersActivity::class.java)
+                intent.putExtra(Constants.BOARD_DETAIL,mBoardDetails)
                 startActivity(intent)
             }
         }

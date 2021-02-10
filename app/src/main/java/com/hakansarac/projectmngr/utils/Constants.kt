@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
-import com.hakansarac.projectmngr.activities.MyProfileActivity
 
 object Constants {
     const val USERS: String = "Users"
@@ -15,7 +14,9 @@ object Constants {
     const val MOBILE : String = "mobile"
     const val ASSIGNED_TO : String = "assignedTo"
     const val DOCUMENT_ID : String = "documentId"
-    const val TASK_LIST : String = "taskList"   //this strings are very important to match with models' variable names
+    const val TASK_LIST : String = "taskList"
+    const val BOARD_DETAIL: String = "board_detail"
+    const val ID: String = "id"             //this strings are very important to match with models' variable names
     const val READ_STORAGE_PERMISSION_CODE = 1
     const val PICK_IMAGE_REQUEST_CODE = 2
 
