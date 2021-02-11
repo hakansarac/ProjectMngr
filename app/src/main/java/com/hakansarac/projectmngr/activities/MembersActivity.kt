@@ -1,7 +1,11 @@
 package com.hakansarac.projectmngr.activities
 
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hakansarac.projectmngr.R
 import com.hakansarac.projectmngr.firebase.FirestoreClass
@@ -10,6 +14,7 @@ import com.hakansarac.projectmngr.models.User
 import com.hakansarac.projectmngr.utils.Constants
 import com.projemanag.adapters.MemberListItemsAdapter
 import kotlinx.android.synthetic.main.activity_members.*
+import kotlinx.android.synthetic.main.dialog_add_member.*
 
 class MembersActivity : BaseActivity() {
 
@@ -39,6 +44,42 @@ class MembersActivity : BaseActivity() {
             actionBar.title = resources.getString(R.string.members)
         }
         toolbarMembersActivity.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_add_member,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.actionAddMember -> {
+                dialogAddMember()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    /**
+     * preparing Add Member Dialog functionality
+     */
+    private fun dialogAddMember(){
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_add_member)
+        dialog.textViewAddMember.setOnClickListener {
+            val email = dialog.editTextEmailAddMember.text.toString()
+            if(email.isNotEmpty()){
+                dialog.dismiss()
+                //TODO: implement adding member
+            }else{
+                Toast.makeText(this@MembersActivity,"Please enter an email.",Toast.LENGTH_SHORT).show()
+            }
+        }
+        dialog.textViewCancelAddMember.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     /**
