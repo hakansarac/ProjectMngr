@@ -185,4 +185,46 @@ class FirestoreClass {
                 Log.e(activity.javaClass.simpleName, "Error while creating a member",exception)
             }
     }
+
+    /**
+     * check the assignedTo member in firebase
+     * if he/she does not exist as an user, show error snackbar
+     * if he/she exists, add the user to assigned member of board by calling memberDetails function
+     */
+    fun getMemberDetails(activity: MembersActivity, email: String){
+        mFireStore.collection(Constants.USERS)
+                .whereEqualTo(Constants.EMAIL, email)
+                .get()
+                .addOnSuccessListener { document ->
+                    if(document.documents.size > 0){
+                        val user = document.documents[0].toObject(User::class.java)
+                        activity.memberDetails(user!!)
+                    } else{
+                        activity.hideProgressDialog()
+                        activity.showErrorSnackBar("No such member found.")
+                    }
+                }.addOnFailureListener { exception ->
+                    activity.hideProgressDialog()
+                    Log.e(activity.javaClass.simpleName, "Error while getting user details.",exception)
+                }
+    }
+
+    /**
+     * get the board and user details,
+     * update the database with new member.
+     */
+    fun assignMemberToBoard(activity : MembersActivity,board: Board,user: User){
+        val assignedToHashMap = HashMap<String, Any>()
+        assignedToHashMap[Constants.ASSIGNED_TO] = board.assignedTo
+
+        mFireStore.collection(Constants.BOARDS)
+                .document(board.documentId)
+                .update(assignedToHashMap)
+                .addOnSuccessListener {
+                    activity.memberAssignSuccess(user)
+                }.addOnFailureListener { exception ->
+                    activity.hideProgressDialog()
+                    Log.e(activity.javaClass.simpleName,"Error while creating new member.",exception)
+                }
+    }
 }

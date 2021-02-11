@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.dialog_add_member.*
 class MembersActivity : BaseActivity() {
 
     private lateinit var mBoardDetails : Board
+    private lateinit var mAssignedMembersList : ArrayList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +72,8 @@ class MembersActivity : BaseActivity() {
             val email = dialog.editTextEmailAddMember.text.toString()
             if(email.isNotEmpty()){
                 dialog.dismiss()
-                //TODO: implement adding member
+                showProgressDialog(resources.getString(R.string.please_wait))
+                FirestoreClass().getMemberDetails(this, email)
             }else{
                 Toast.makeText(this@MembersActivity,"Please enter an email.",Toast.LENGTH_SHORT).show()
             }
@@ -86,11 +88,31 @@ class MembersActivity : BaseActivity() {
      * prepare the members list recycler view
      */
     fun setupMembersList(list: ArrayList<User>){
+        mAssignedMembersList = list
         hideProgressDialog()
 
         recyclerViewMembersList.layoutManager = LinearLayoutManager(this)
         recyclerViewMembersList.setHasFixedSize(true)
         val adapter = MemberListItemsAdapter(this, list)
         recyclerViewMembersList.adapter = adapter
+    }
+
+    /**
+     * add the new member to mAssignedMembersList,
+     * and setup members list.
+     */
+    fun memberAssignSuccess(user: User){
+        hideProgressDialog()
+        mAssignedMembersList.add(user)
+        setupMembersList(mAssignedMembersList)
+    }
+
+    /**
+     * get the user details and add it to assignedTo list of boards in firebase
+     * by calling assignMemberToBoard function
+     */
+    fun memberDetails(user: User){
+        mBoardDetails.assignedTo.add(user.id)
+        FirestoreClass().assignMemberToBoard(this,mBoardDetails,user)
     }
 }
