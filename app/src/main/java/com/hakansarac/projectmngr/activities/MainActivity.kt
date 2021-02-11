@@ -37,7 +37,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     companion object{
         const val MY_PROFILE_REQUEST_CODE : Int = 11
-        const val CREATE_BOARD_REQUEST_CODE = 12
+        const val CREATE_BOARD_REQUEST_CODE : Int = 12
     }
 
     /**

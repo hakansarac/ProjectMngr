@@ -1,5 +1,6 @@
 package com.hakansarac.projectmngr.activities
 
+import android.app.Activity
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,6 +21,7 @@ class MembersActivity : BaseActivity() {
 
     private lateinit var mBoardDetails : Board
     private lateinit var mAssignedMembersList : ArrayList<User>
+    private var anyChangesOnMemberList : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +62,13 @@ class MembersActivity : BaseActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if(anyChangesOnMemberList){
+            setResult(Activity.RESULT_OK)
+        }
+        super.onBackPressed()
     }
 
     /**
@@ -104,6 +113,7 @@ class MembersActivity : BaseActivity() {
     fun memberAssignSuccess(user: User){
         hideProgressDialog()
         mAssignedMembersList.add(user)
+        anyChangesOnMemberList = true
         setupMembersList(mAssignedMembersList)
     }
 
