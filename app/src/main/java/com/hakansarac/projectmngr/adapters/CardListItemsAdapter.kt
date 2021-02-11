@@ -33,24 +33,25 @@ open class CardListItemsAdapter(
         val model = list[position]
         if (holder is MyViewHolder) {
             holder.itemView.textViewCardName.text = model.name
+            holder.itemView.setOnClickListener {
+                if(onClickListener != null){
+                    onClickListener!!.onClick(position)
+                }
+            }
         }
     }
-
 
     override fun getItemCount(): Int {
         return list.size
     }
 
-
     fun setOnClickListener(onClickListener: OnClickListener) {
         this.onClickListener = onClickListener
     }
 
-
     interface OnClickListener {
-        fun onClick(position: Int, card: Card)
+        fun onClick(position: Int)
     }
-
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }

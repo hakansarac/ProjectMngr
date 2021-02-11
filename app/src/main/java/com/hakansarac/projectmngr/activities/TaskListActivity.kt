@@ -22,6 +22,11 @@ class TaskListActivity : BaseActivity() {
 
     private lateinit var mBoardDetails : Board
     private lateinit var mBoardDocumentId : String
+
+    companion object{
+        const val MEMBER_REQUEST_CODE : Int = 13
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
@@ -163,7 +168,8 @@ class TaskListActivity : BaseActivity() {
         FirestoreClass().addUpdateTaskList(this,mBoardDetails)
     }
 
-    companion object{
-        const val MEMBER_REQUEST_CODE : Int = 13
+    fun cardDetails(taskListPosition : Int, cardPosition: Int){
+        val intent = Intent(this, CardDetailsActivity::class.java)
+        startActivity(intent)
     }
 }

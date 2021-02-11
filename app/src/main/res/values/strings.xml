@@ -65,4 +65,12 @@
     <string name="add">ADD</string>
     <string name="search_member">Search Member</string>
     <!-- member activity strings end -->
+
+    <!-- card details strings start -->
+    <string name="label_color">Label Color</string>
+    <string name="select_color">Select Color</string>
+    <string name="select_members">Select Members</string>
+    <string name="due_date">Due Date</string>
+    <string name="select_due_date">Select Due Date</string>
+    <!-- card details strings end -->
 </resources>
