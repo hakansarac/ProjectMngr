@@ -85,7 +85,8 @@
                     android:layout_marginTop="@dimen/card_details_value_marginTop"
                     android:padding="@dimen/card_details_value_padding"
                     android:text="@string/select_color"
-                    android:textColor="@color/primary_text_color" />
+                    android:textColor="@color/primary_text_color"
+                    android:onClick="onClickTextViewSelectLabelColor"/>
 
                 <TextView
                     android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package com.hakansarac.projectmngr.activities
 
 import android.app.Activity
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -9,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.hakansarac.projectmngr.R
+import com.hakansarac.projectmngr.dialogs.LabelColorListDialog
 import com.hakansarac.projectmngr.firebase.FirestoreClass
 import com.hakansarac.projectmngr.models.Board
 import com.hakansarac.projectmngr.models.Card
@@ -23,6 +25,7 @@ class CardDetailsActivity : BaseActivity() {
     private lateinit var mBoardDetails : Board
     private var mTaskListPosition = -1
     private var mCardPosition = -1
+    private var mSelectedColor = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +35,11 @@ class CardDetailsActivity : BaseActivity() {
         setupActionBar()
         editTextNameCardDetails.setText(mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].name)
         editTextNameCardDetails.setSelection(editTextNameCardDetails.text.toString().length)    //to set the focus directly onto the ending of the length of the text.
+
+        mSelectedColor = mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].labelColor
+        if(mSelectedColor.isNotEmpty()){
+            setColor()
+        }
     }
 
     /**
@@ -94,7 +102,8 @@ class CardDetailsActivity : BaseActivity() {
         val card = Card(
                 editTextNameCardDetails.text.toString(),
                 mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].createdBy,
-                mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo
+                mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo,
+                mSelectedColor
         )
         mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition] = card   //card name can be changed
 
@@ -117,6 +126,10 @@ class CardDetailsActivity : BaseActivity() {
         FirestoreClass().addUpdateTaskList(this@CardDetailsActivity,mBoardDetails)
     }
 
+    /**
+     * if the user clicks on Update button,
+     * update card details
+     */
     fun onClickButtonUpdateCardDetails(view: View){
         if(editTextNameCardDetails.text.toString().isNotEmpty()){
             updateCardDetails()
@@ -143,5 +156,50 @@ class CardDetailsActivity : BaseActivity() {
 
         alertDialog.setCancelable(false)
         alertDialog.show()
+    }
+
+    /**
+     * preparing of colors list
+     */
+    private fun colorsList(): ArrayList<String>{
+        val colorsList: ArrayList<String> = ArrayList()
+        colorsList.add("#43C86F")
+        colorsList.add("#0C90F1")
+        colorsList.add("#F72400")
+        colorsList.add("#7A8089")
+        colorsList.add("#D57C1D")
+        colorsList.add("#770000")
+        colorsList.add("#0022F8")
+        return colorsList
+    }
+
+    /**
+     * set the background with selected color
+     */
+    private fun setColor(){
+        textViewSelectLabelColor.text = ""
+        textViewSelectLabelColor.setBackgroundColor(Color.parseColor(mSelectedColor))
+    }
+
+    /**
+     * show the colors list dialog to user select the card color
+     */
+    private fun labelColorsListDialog(){
+        val colorsList : ArrayList<String> = colorsList()
+        val listDialog = object : LabelColorListDialog(this,colorsList,resources.getString(R.string.str_select_label_color),mSelectedColor){
+            override fun onItemSelected(color: String) {
+                mSelectedColor = color
+                setColor()
+            }
+        }
+        listDialog.show()
+    }
+
+    /**
+     * if the user clicks on the selected color,
+     * show the colors list dialog
+     */
+    fun onClickTextViewSelectLabelColor(view: View){
+        labelColorsListDialog()
     }
 }
