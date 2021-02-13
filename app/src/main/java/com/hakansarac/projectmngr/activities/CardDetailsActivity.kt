@@ -15,6 +15,7 @@ import com.hakansarac.projectmngr.firebase.FirestoreClass
 import com.hakansarac.projectmngr.models.Board
 import com.hakansarac.projectmngr.models.Card
 import com.hakansarac.projectmngr.models.Task
+import com.hakansarac.projectmngr.models.User
 import com.hakansarac.projectmngr.utils.Constants
 import kotlinx.android.synthetic.main.activity_card_details.*
 import kotlinx.android.synthetic.main.activity_members.*
@@ -26,6 +27,7 @@ class CardDetailsActivity : BaseActivity() {
     private var mTaskListPosition = -1
     private var mCardPosition = -1
     private var mSelectedColor = ""
+    private lateinit var mMembersDetailList : ArrayList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +85,9 @@ class CardDetailsActivity : BaseActivity() {
         }
         if(intent.hasExtra(Constants.CARD_LIST_ITEM_POSITION)){
             mCardPosition = intent.getIntExtra(Constants.CARD_LIST_ITEM_POSITION,-1)
+        }
+        if(intent.hasExtra(Constants.BOARD_MEMBERS_LIST)){
+            mMembersDetailList = intent.getParcelableArrayListExtra(Constants.BOARD_MEMBERS_LIST)!!
         }
     }
 

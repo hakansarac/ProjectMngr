@@ -14,6 +14,7 @@ import com.hakansarac.projectmngr.firebase.FirestoreClass
 import com.hakansarac.projectmngr.models.Board
 import com.hakansarac.projectmngr.models.Card
 import com.hakansarac.projectmngr.models.Task
+import com.hakansarac.projectmngr.models.User
 import com.hakansarac.projectmngr.utils.Constants
 import kotlinx.android.synthetic.main.activity_my_profile.*
 import kotlinx.android.synthetic.main.activity_task_list.*
@@ -22,6 +23,7 @@ class TaskListActivity : BaseActivity() {
 
     private lateinit var mBoardDetails : Board
     private lateinit var mBoardDocumentId : String
+    private lateinit var mAssignedMemberDetailList : ArrayList<User>
 
     companion object{
         const val MEMBER_REQUEST_CODE : Int = 13
@@ -101,6 +103,9 @@ class TaskListActivity : BaseActivity() {
         recyclerViewTaskList.setHasFixedSize(true)
         val adapter = TaskListItemsAdapter(this,board.taskList)
         recyclerViewTaskList.adapter = adapter
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().getAssignedMembersListDetails(this,mBoardDetails.assignedTo)
     }
 
     /**
@@ -177,6 +182,12 @@ class TaskListActivity : BaseActivity() {
         intent.putExtra(Constants.BOARD_DETAIL,mBoardDetails)
         intent.putExtra(Constants.TASK_LIST_ITEM_POSITION,taskListPosition)
         intent.putExtra(Constants.CARD_LIST_ITEM_POSITION,cardPosition)
+        intent.putExtra(Constants.BOARD_MEMBERS_LIST,mAssignedMemberDetailList)
         startActivityForResult(intent, CARD_DETAILS_REQUEST_CODE)
+    }
+
+    fun boardMembersDetailsList(list: ArrayList<User>){
+        mAssignedMemberDetailList = list
+        hideProgressDialog()
     }
 }
