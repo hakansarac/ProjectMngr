@@ -132,6 +132,7 @@
     <dimen name="item_member_email_text_size">14sp</dimen>
     <dimen name="item_member_divider_height">0.3dp</dimen>
     <dimen name="item_member_divider_marginTop">5dp</dimen>
+    <dimen name="item_selected_member_image_size">45dp</dimen>
     <!-- member item dimens end -->
 
     <!-- member dialog dimens start -->
@@ -160,7 +161,7 @@
     <dimen name="card_details_update_btn_marginTop">30dp</dimen>
     <!-- card details dimens end -->
 
-    <!--  -->
+    <!-- list dialog dimens start -->
     <dimen name="item_label_color_height">40dp</dimen>
     <dimen name="item_label_color_margin">5dp</dimen>
     <dimen name="item_label_color_selected_image_marginEnd">10dp</dimen>
@@ -170,5 +171,5 @@
     <dimen name="dialog_list_title_text_size">18sp</dimen>
     <dimen name="dialog_list_divider_height">1dp</dimen>
     <dimen name="dialog_list_marginTopBottom">3dp</dimen>
-    <!--  -->
+    <!-- list dialog dimens end -->
 </resources>

@@ -13,7 +13,7 @@ import com.hakansarac.projectmngr.firebase.FirestoreClass
 import com.hakansarac.projectmngr.models.Board
 import com.hakansarac.projectmngr.models.User
 import com.hakansarac.projectmngr.utils.Constants
-import com.projemanag.adapters.MemberListItemsAdapter
+import com.hakansarac.projectmngr.adapters.MemberListItemsAdapter
 import kotlinx.android.synthetic.main.activity_members.*
 import kotlinx.android.synthetic.main.dialog_add_member.*
 

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.hakansarac.projectmngr.R
 import com.hakansarac.projectmngr.dialogs.LabelColorListDialog
+import com.hakansarac.projectmngr.dialogs.MembersListDialog
 import com.hakansarac.projectmngr.firebase.FirestoreClass
 import com.hakansarac.projectmngr.models.Board
 import com.hakansarac.projectmngr.models.Card
@@ -201,10 +202,45 @@ class CardDetailsActivity : BaseActivity() {
     }
 
     /**
-     * if the user clicks on the selected color,
+     * show the members list dialog to user select members of card
+     */
+    private fun membersListDialog(){
+        val cardAssignedMembersList = mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo
+
+        if(cardAssignedMembersList.size > 0){
+            for(i in mMembersDetailList.indices){
+                for(j in cardAssignedMembersList){
+                    if(mMembersDetailList[i].id == j){
+                        mMembersDetailList[i].selected = true
+                    }
+                }
+            }
+        } else{
+            for(i in mMembersDetailList.indices){
+                mMembersDetailList[i].selected = false
+            }
+        }
+        val listDialog = object: MembersListDialog(this,mMembersDetailList,resources.getString(R.string.str_select_member)){
+            override fun onItemSelected(user: User, action: String) {
+                //TODO: implement selected members functionality
+            }
+        }
+        listDialog.show()
+    }
+
+    /**
+     * if the user clicks on select color,
      * show the colors list dialog
      */
     fun onClickTextViewSelectLabelColor(view: View){
         labelColorsListDialog()
+    }
+
+    /**
+     * if the user clicks on selected members,
+     * show the members list dialog
+     */
+    fun onClickTextViewSelectMembers(view : View){
+        membersListDialog()
     }
 }

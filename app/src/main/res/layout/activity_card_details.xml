@@ -103,8 +103,17 @@
                     android:layout_marginTop="@dimen/card_details_value_marginTop"
                     android:padding="@dimen/card_details_value_padding"
                     android:text="@string/select_members"
-                    android:textColor="@color/primary_text_color" />
+                    android:textColor="@color/primary_text_color"
+                    android:onClick="onClickTextViewSelectMembers"/>
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewSelectedMembersList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/card_details_value_marginTop"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+                
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
