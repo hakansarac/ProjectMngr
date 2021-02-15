@@ -9,14 +9,13 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.GridLayoutManager
 import com.hakansarac.projectmngr.R
+import com.hakansarac.projectmngr.adapters.CardMemberListItemsAdapter
 import com.hakansarac.projectmngr.dialogs.LabelColorListDialog
 import com.hakansarac.projectmngr.dialogs.MembersListDialog
 import com.hakansarac.projectmngr.firebase.FirestoreClass
-import com.hakansarac.projectmngr.models.Board
-import com.hakansarac.projectmngr.models.Card
-import com.hakansarac.projectmngr.models.Task
-import com.hakansarac.projectmngr.models.User
+import com.hakansarac.projectmngr.models.*
 import com.hakansarac.projectmngr.utils.Constants
 import kotlinx.android.synthetic.main.activity_card_details.*
 import kotlinx.android.synthetic.main.activity_members.*
@@ -43,6 +42,8 @@ class CardDetailsActivity : BaseActivity() {
         if(mSelectedColor.isNotEmpty()){
             setColor()
         }
+
+        setupSelectedMembersList()
     }
 
     /**
@@ -111,6 +112,10 @@ class CardDetailsActivity : BaseActivity() {
                 mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo,
                 mSelectedColor
         )
+
+        val taskList: ArrayList<Task> = mBoardDetails.taskList
+        taskList.removeAt(taskList.size-1)
+
         mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition] = card   //card name can be changed
 
         showProgressDialog(resources.getString(R.string.please_wait))
@@ -222,7 +227,19 @@ class CardDetailsActivity : BaseActivity() {
         }
         val listDialog = object: MembersListDialog(this,mMembersDetailList,resources.getString(R.string.str_select_member)){
             override fun onItemSelected(user: User, action: String) {
-                //TODO: implement selected members functionality
+                if(action == Constants.SELECT){
+                    if(!mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo.contains(user.id)){
+                        mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo.add(user.id)
+                    }
+                }else{
+                    mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo.remove(user.id)
+                    for(i in mMembersDetailList.indices){
+                        if(mMembersDetailList[i].id == user.id){
+                            mMembersDetailList[i].selected = false
+                        }
+                    }
+                }
+                setupSelectedMembersList()
             }
         }
         listDialog.show()
@@ -243,4 +260,47 @@ class CardDetailsActivity : BaseActivity() {
     fun onClickTextViewSelectMembers(view : View){
         membersListDialog()
     }
+
+    /**
+     * setup selected members list
+     */
+    private fun setupSelectedMembersList() {
+
+        val cardAssignedMembersList =
+                mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo
+
+        val selectedMembersList: ArrayList<SelectedMembers> = ArrayList()
+
+        for (i in mMembersDetailList.indices) {
+            for (j in cardAssignedMembersList) {
+                if (mMembersDetailList[i].id == j) {
+                    val selectedMember = SelectedMembers(
+                            mMembersDetailList[i].id,
+                            mMembersDetailList[i].image
+                    )
+                    selectedMembersList.add(selectedMember)
+                }
+            }
+        }
+
+        if (selectedMembersList.size > 0) {
+            selectedMembersList.add(SelectedMembers("", ""))
+
+            textViewSelectMembers.visibility = View.GONE
+            recyclerViewSelectedMembersList.visibility = View.VISIBLE
+
+            recyclerViewSelectedMembersList.layoutManager = GridLayoutManager(this@CardDetailsActivity, 6)
+            val adapter = CardMemberListItemsAdapter(this@CardDetailsActivity, selectedMembersList)
+            recyclerViewSelectedMembersList.adapter = adapter
+            adapter.setOnClickListener(object : CardMemberListItemsAdapter.OnClickListener {
+                override fun onClick() {
+                    membersListDialog()
+                }
+            })
+        } else {
+            textViewSelectMembers.visibility = View.VISIBLE
+            recyclerViewSelectedMembersList.visibility = View.GONE
+        }
+    }
+
 }

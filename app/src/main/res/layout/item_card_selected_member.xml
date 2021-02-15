@@ -9,7 +9,7 @@
     android:padding="5dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_selected_member_image"
+        android:id="@+id/imageViewSelectedMemberImage"
         android:layout_width="@dimen/item_selected_member_image_size"
         android:layout_height="@dimen/item_selected_member_image_size"
         android:contentDescription="@string/image_contentDescription"
@@ -20,7 +20,7 @@
         tools:visibility="gone" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_add_member"
+        android:id="@+id/imageViewAddMember"
         android:layout_width="@dimen/item_selected_member_image_size"
         android:layout_height="@dimen/item_selected_member_image_size"
         android:contentDescription="@string/image_contentDescription"
