@@ -179,6 +179,9 @@ class TaskListActivity : BaseActivity() {
         startActivityForResult(intent, CARD_DETAILS_REQUEST_CODE)
     }
 
+    /**
+     * set assigned members details in tasks list
+     */
     fun boardMembersDetailsList(list: ArrayList<User>){
         mAssignedMemberDetailList = list
         hideProgressDialog()
@@ -189,5 +192,16 @@ class TaskListActivity : BaseActivity() {
         recyclerViewTaskList.setHasFixedSize(true)
         val adapter = TaskListItemsAdapter(this,mBoardDetails.taskList)
         recyclerViewTaskList.adapter = adapter
+    }
+
+    /**
+     * update order of cards
+     */
+    fun updateCardsInTaskList(taskListPosition: Int, cards: ArrayList<Card>){
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)    //to remove add card member
+        mBoardDetails.taskList[taskListPosition].cards = cards
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().addUpdateTaskList(this,mBoardDetails)
     }
 }

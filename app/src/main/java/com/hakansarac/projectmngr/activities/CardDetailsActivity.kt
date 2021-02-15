@@ -320,6 +320,9 @@ class CardDetailsActivity : BaseActivity() {
         showDataPicker()
     }
 
+    /**
+     * setup calendar dialog
+     */
     private fun showDataPicker() {
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
