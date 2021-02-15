@@ -23,7 +23,7 @@ class TaskListActivity : BaseActivity() {
 
     private lateinit var mBoardDetails : Board
     private lateinit var mBoardDocumentId : String
-    private lateinit var mAssignedMemberDetailList : ArrayList<User>
+    lateinit var mAssignedMemberDetailList : ArrayList<User>
 
     companion object{
         const val MEMBER_REQUEST_CODE : Int = 13
@@ -96,13 +96,6 @@ class TaskListActivity : BaseActivity() {
         mBoardDetails = board
         hideProgressDialog()
         setupActionBar()
-
-        val addTaskList = Task(resources.getString(R.string.add_list))
-        board.taskList.add(addTaskList) //it will be Add List textView(selectable item like a button)
-        recyclerViewTaskList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
-        recyclerViewTaskList.setHasFixedSize(true)
-        val adapter = TaskListItemsAdapter(this,board.taskList)
-        recyclerViewTaskList.adapter = adapter
 
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().getAssignedMembersListDetails(this,mBoardDetails.assignedTo)
@@ -189,5 +182,12 @@ class TaskListActivity : BaseActivity() {
     fun boardMembersDetailsList(list: ArrayList<User>){
         mAssignedMemberDetailList = list
         hideProgressDialog()
+
+        val addTaskList = Task(resources.getString(R.string.add_list))
+        mBoardDetails.taskList.add(addTaskList) //it will be Add List textView(selectable item like a button)
+        recyclerViewTaskList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
+        recyclerViewTaskList.setHasFixedSize(true)
+        val adapter = TaskListItemsAdapter(this,mBoardDetails.taskList)
+        recyclerViewTaskList.adapter = adapter
     }
 }

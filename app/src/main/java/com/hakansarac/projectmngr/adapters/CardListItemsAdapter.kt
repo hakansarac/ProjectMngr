@@ -5,9 +5,12 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hakansarac.projectmngr.R
+import com.hakansarac.projectmngr.activities.TaskListActivity
 import com.hakansarac.projectmngr.models.Card
+import com.hakansarac.projectmngr.models.SelectedMembers
 import kotlinx.android.synthetic.main.item_card.view.*
 
 
@@ -40,6 +43,41 @@ open class CardListItemsAdapter(
                 holder.itemView.viewLabelColor.visibility = View.GONE
             }
             holder.itemView.textViewCardName.text = model.name
+
+            if((context as TaskListActivity).mAssignedMemberDetailList.size > 0){
+                val selectedMembersList: ArrayList<SelectedMembers> = ArrayList()
+                for(i in context.mAssignedMemberDetailList.indices){
+                    for(j in model.assignedTo){
+                        if(context.mAssignedMemberDetailList[i].id == j){
+                            val selectedMembers = SelectedMembers(
+                                    context.mAssignedMemberDetailList[i].id,
+                                    context.mAssignedMemberDetailList[i].image
+                            )
+                            selectedMembersList.add(selectedMembers)
+                        }
+                    }
+                }
+
+                if(selectedMembersList.size > 0){
+                    if(selectedMembersList.size == 1 && selectedMembersList[0].id == model.createdBy){
+                        holder.itemView.recyclerViewCardSelectedMembers.visibility = View.GONE
+                    }else{
+                        holder.itemView.recyclerViewCardSelectedMembers.visibility = View.VISIBLE
+                        holder.itemView.recyclerViewCardSelectedMembers.layoutManager = GridLayoutManager(context,4)
+                        val adapter = CardMemberListItemsAdapter(context,selectedMembersList,false)
+                        holder.itemView.recyclerViewCardSelectedMembers.adapter = adapter
+                        adapter.setOnClickListener(object:CardMemberListItemsAdapter.OnClickListener{
+                            override fun onClick() {
+                                if(onClickListener != null){
+                                    onClickListener!!.onClick(position)
+                                }
+                            }
+                        })
+                    }
+                }else{
+                    holder.itemView.recyclerViewCardSelectedMembers.visibility = View.GONE
+                }
+            }
             holder.itemView.setOnClickListener {
                 if(onClickListener != null){
                     onClickListener!!.onClick(position)

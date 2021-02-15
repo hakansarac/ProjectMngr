@@ -290,7 +290,7 @@ class CardDetailsActivity : BaseActivity() {
             recyclerViewSelectedMembersList.visibility = View.VISIBLE
 
             recyclerViewSelectedMembersList.layoutManager = GridLayoutManager(this@CardDetailsActivity, 6)
-            val adapter = CardMemberListItemsAdapter(this@CardDetailsActivity, selectedMembersList)
+            val adapter = CardMemberListItemsAdapter(this@CardDetailsActivity, selectedMembersList,true)
             recyclerViewSelectedMembersList.adapter = adapter
             adapter.setOnClickListener(object : CardMemberListItemsAdapter.OnClickListener {
                 override fun onClick() {
