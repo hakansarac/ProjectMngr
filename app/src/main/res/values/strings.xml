@@ -81,4 +81,6 @@
     <string name="str_select_member">Select Member</string>
     <!-- card details strings end -->
 
+    <string name="default_notification_channel_id">projectmngr_notification_channel_id</string>
+
 </resources>
