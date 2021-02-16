@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 
 object Constants {
+    //this strings are very important to match with models' variable names
     const val USERS: String = "Users"
     const val BOARDS : String = "boards"
     const val IMAGE : String = "image"
@@ -25,7 +26,15 @@ object Constants {
     const val UN_SELECT: String = "UnSelect"
     const val PROJECT_MNGR_PREFERENCES = "ProjectmngrPreferences"
     const val FCM_TOKEN_UPDATED = "fcmTokenUpdated"
-    const val FCM_TOKEN = "fcmToken"              //this strings are very important to match with models' variable names
+    const val FCM_TOKEN = "fcmToken"
+    const val FCM_BASE_URL:String = "https://fcm.googleapis.com/fcm/send"
+    const val FCM_AUTHORIZATION:String = "authorization"
+    const val FCM_KEY:String = "key"
+    //TODO: const val FCM_SERVER_KEY:String = "Your own fcm_server_key" from firebase -> project settings -> Cloud Messaging
+    const val FCM_KEY_TITLE:String = "title"
+    const val FCM_KEY_MESSAGE:String = "message"
+    const val FCM_KEY_DATA:String = "data"
+    const val FCM_KEY_TO:String = "to"
     const val READ_STORAGE_PERMISSION_CODE = 1
     const val PICK_IMAGE_REQUEST_CODE = 2
 
