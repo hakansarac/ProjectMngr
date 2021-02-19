@@ -35,7 +35,9 @@ object Constants {
     const val FCM_KEY_MESSAGE:String = "message"
     const val FCM_KEY_DATA:String = "data"
     const val FCM_KEY_TO:String = "to"
+    //A unique code for asking the Read Storage Permission using this we will be check and identify in the method onRequestPermissionsResult
     const val READ_STORAGE_PERMISSION_CODE = 1
+    // A unique code of image selection from Phone Storage.
     const val PICK_IMAGE_REQUEST_CODE = 2
 
     /**
